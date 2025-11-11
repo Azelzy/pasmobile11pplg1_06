@@ -31,8 +31,7 @@ dependencies:
   # The flutter SDK dependency is listed first
   flutter:
     sdk: flutter 
-
-  # External packages are now listed directly under 'dependencies:' with version constraints
+  get: ^4.7.2
   shared_preferences: ^2.2.3 
   sqflite: ^2.3.4 
   http: ^1.2.1 
