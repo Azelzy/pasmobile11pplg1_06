@@ -4,8 +4,8 @@ import 'package:pasmobile11pplg1_06/routes/routes.dart';
 
 class SplashscreenController extends GetxController {
   @override
-  void onInit() {
-    super.onInit();
+  void onReady() {
+    super.onReady();
     _checkLoginStatus();
   }
 
@@ -17,14 +17,19 @@ class SplashscreenController extends GetxController {
 
       final isLoggedIn = await SharedPrefHelper.isLoggedIn();
 
+      print('Is logged in: $isLoggedIn'); // Debug log
+
       if (isLoggedIn) {
-        Get.offNamed(AppRoutes.bottomNav);
+        print('Navigating to bottomNav'); // Debug log
+        Get.offAllNamed(AppRoutes.bottomNav);
       } else {
-        Get.offNamed(AppRoutes.login);
+        print('Navigating to login'); // Debug log
+        Get.offAllNamed(AppRoutes.login);
       }
     } catch (e) {
       print('Error checking login status: $e');
-      Get.offNamed(AppRoutes.login);
+      // Jika ada error, arahkan ke login
+      Get.offAllNamed(AppRoutes.login);
     }
   }
 }

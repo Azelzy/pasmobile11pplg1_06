@@ -9,7 +9,16 @@ class ProfileController extends GetxController {
   final fullName = ''.obs;
   final isLoading = false.obs;
 
-  final authController = Get.find<AuthController>();
+  // FIX #4: Gunakan Get.find dengan orElse untuk handle jika belum ada
+  AuthController get authController {
+    try {
+      return Get.find<AuthController>();
+    } catch (e) {
+      // Jika AuthController belum ada, buat instance baru
+      Get.put(AuthController());
+      return Get.find<AuthController>();
+    }
+  }
 
   @override
   void onInit() {

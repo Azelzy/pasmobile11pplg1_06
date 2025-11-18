@@ -95,8 +95,11 @@ class LoginPage extends GetView<AuthController> {
                   label: 'LOGIN',
                   isLoading: controller.isLoading.value,
                   onPressed: () {
-                    if (usernameController.text.isEmpty ||
-                        passwordController.text.isEmpty) {
+                    // FIX #2: Validasi yang lebih baik dengan trim()
+                    final username = usernameController.text.trim();
+                    final password = passwordController.text.trim();
+
+                    if (username.isEmpty || password.isEmpty) {
                       Get.snackbar(
                         'Error',
                         'Please fill all fields',
@@ -105,10 +108,8 @@ class LoginPage extends GetView<AuthController> {
                       );
                       return;
                     }
-                    controller.login(
-                      username: usernameController.text,
-                      password: passwordController.text,
-                    );
+
+                    controller.login(username: username, password: password);
                   },
                   borderSide: const BorderSide(color: Colors.black, width: 2),
                 ),

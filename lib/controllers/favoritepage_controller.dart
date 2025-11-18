@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pasmobile11pplg1_06/helper/dbproduct_helper.dart';
-import 'package:pasmobile11pplg1_06/models/fakestore_model.dart';
+import 'package:pasmobile11pplg1_06/models/Store_model.dart';
+import 'package:pasmobile11pplg1_06/controllers/listproduk_controller.dart';
 
 class FavoriteController extends GetxController {
   final isLoading = false.obs;
@@ -35,6 +36,16 @@ class FavoriteController extends GetxController {
     try {
       await dbHelper.removeFromFavorites(productId);
       favorites.removeWhere((p) => p.id == productId);
+      
+      // FIX #3: Update favoriteIds di ListprodukController jika ada
+      try {
+        final listController = Get.find<ListprodukController>();
+        await listController.refreshFromFavorite();
+      } catch (e) {
+        // ListprodukController mungkin belum di-load, tidak masalah
+        print('ListprodukController not found: $e');
+      }
+      
       Get.snackbar(
         'Removed',
         'Removed from favorites',
@@ -56,6 +67,16 @@ class FavoriteController extends GetxController {
     try {
       await dbHelper.clearAllFavorites();
       favorites.clear();
+      
+      // FIX #3: Update favoriteIds di ListprodukController jika ada
+      try {
+        final listController = Get.find<ListprodukController>();
+        await listController.refreshFromFavorite();
+      } catch (e) {
+        // ListprodukController mungkin belum di-load, tidak masalah
+        print('ListprodukController not found: $e');
+      }
+      
       Get.snackbar(
         'Cleared',
         'All favorites cleared',

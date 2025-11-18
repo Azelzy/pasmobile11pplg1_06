@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pasmobile11pplg1_06/helper/dbproduct_helper.dart';
-import 'package:pasmobile11pplg1_06/models/fakestore_model.dart';
+import 'package:pasmobile11pplg1_06/models/Store_model.dart';
 import 'package:pasmobile11pplg1_06/networks/client_network.dart';
 
 class ListprodukController extends GetxController {
   final isLoading = false.obs;
   final products = <FakeStoreModel>[].obs;
-  final favoriteIds = <int>{}.obs;
+  final favoriteIds = <int>{}.obs; // FIX #3: Gunakan Set untuk favoriteIds
   final errorMessage = ''.obs;
 
   final dbHelper = DbProductHelper();
@@ -43,7 +43,11 @@ class ListprodukController extends GetxController {
   Future<void> loadFavorites() async {
     try {
       final favorites = await dbHelper.getAllFavorites();
-      favoriteIds.assignAll(favorites.map((p) => p.id));
+      // FIX #3: Clear dulu sebelum assign ulang
+      favoriteIds.clear();
+      favoriteIds.addAll(favorites.map((p) => p.id));
+      // Trigger update UI
+      favoriteIds.refresh();
     } catch (e) {
       errorMessage.value = e.toString();
     }
@@ -78,6 +82,8 @@ class ListprodukController extends GetxController {
           colorText: Colors.white,
         );
       }
+      // FIX #3: Trigger update UI setelah perubahan
+      favoriteIds.refresh();
     } catch (e) {
       Get.snackbar(
         'Error',
@@ -86,5 +92,10 @@ class ListprodukController extends GetxController {
         colorText: Colors.white,
       );
     }
+  }
+
+  // FIX #3: Tambahkan method untuk refresh dari favorite page
+  Future<void> refreshFromFavorite() async {
+    await loadFavorites();
   }
 }

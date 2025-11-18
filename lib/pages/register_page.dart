@@ -72,6 +72,7 @@ class RegisterPage extends GetView<AuthController> {
                 ),
                 child: TextField(
                   controller: emailController,
+                  keyboardType: TextInputType.emailAddress,
                   decoration: const InputDecoration(
                     hintText: 'EMAIL',
                     hintStyle: TextStyle(
@@ -147,10 +148,16 @@ class RegisterPage extends GetView<AuthController> {
                   label: 'REGISTER',
                   isLoading: controller.isLoading.value,
                   onPressed: () {
-                    if (usernameController.text.isEmpty ||
-                        passwordController.text.isEmpty ||
-                        emailController.text.isEmpty ||
-                        fullNameController.text.isEmpty) {
+                    // FIX #2: Validasi yang lebih baik dengan trim()
+                    final username = usernameController.text.trim();
+                    final password = passwordController.text.trim();
+                    final email = emailController.text.trim();
+                    final fullName = fullNameController.text.trim();
+
+                    if (username.isEmpty ||
+                        password.isEmpty ||
+                        email.isEmpty ||
+                        fullName.isEmpty) {
                       Get.snackbar(
                         'Error',
                         'Please fill all fields',
@@ -159,11 +166,34 @@ class RegisterPage extends GetView<AuthController> {
                       );
                       return;
                     }
+
+                    // Validasi email format
+                    if (!GetUtils.isEmail(email)) {
+                      Get.snackbar(
+                        'Error',
+                        'Please enter a valid email',
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                      return;
+                    }
+
+                    // Validasi password minimal 6 karakter
+                    if (password.length < 6) {
+                      Get.snackbar(
+                        'Error',
+                        'Password must be at least 6 characters',
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                      return;
+                    }
+
                     controller.register(
-                      username: usernameController.text,
-                      password: passwordController.text,
-                      email: emailController.text,
-                      fullName: fullNameController.text,
+                      username: username,
+                      password: password,
+                      email: email,
+                      fullName: fullName,
                     );
                   },
                   borderSide: const BorderSide(color: Colors.black, width: 2),

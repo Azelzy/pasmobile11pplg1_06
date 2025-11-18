@@ -15,7 +15,8 @@ import 'package:pasmobile11pplg1_06/pages/splashscreen_page.dart';
 import 'package:pasmobile11pplg1_06/routes/routes.dart';
 
 class AppPages {
-  static const String initial = AppRoutes.register;
+  // FIX #1: Ubah initial route ke splash
+  static const String initial = AppRoutes.splash;
 
   static final routes = [
     GetPage(
@@ -39,8 +40,13 @@ class AppPages {
     GetPage(
       name: AppRoutes.bottomNav,
       page: () => BottomnavPage(),
-      binding: BottomNavBinding(),
-      bindings: [ListprodukBinding(), FavoritepageBinding(), ProfileBinding()],
+      bindings: [
+        BottomNavBinding(),
+        ListprodukBinding(),
+        FavoritepageBinding(),
+        ProfileBinding(),
+        AuthBinding(), // FIX #4: Tambahkan AuthBinding untuk ProfileController
+      ],
       transition: Transition.fade,
     ),
     GetPage(
@@ -58,7 +64,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.profile,
       page: () => const ProfilePage(),
-      binding: ProfileBinding(),
+      bindings: [
+        ProfileBinding(),
+        AuthBinding(),
+      ],
       transition: Transition.rightToLeft,
     ),
   ];

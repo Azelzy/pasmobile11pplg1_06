@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:pasmobile11pplg1_06/models/login_model.dart';
 import 'package:pasmobile11pplg1_06/models/register_model.dart';
-import 'package:pasmobile11pplg1_06/models/fakestore_model.dart';
+import 'package:pasmobile11pplg1_06/models/Store_model.dart';
 
 class ClientNetwork {
   static const String _baseUrl = 'https://mediadwi.com/api/latihan';
