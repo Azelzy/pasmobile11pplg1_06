@@ -4,8 +4,8 @@ import '../controllers/bookmark_controller.dart';
 class BookmarkBinding extends Bindings {
   @override
   void dependencies() {
-   
-    Get.put(BookmarkController());
+    if (!Get.isRegistered<BookmarkController>()) {
+      Get.put(BookmarkController());
+    }
   }
-
 }

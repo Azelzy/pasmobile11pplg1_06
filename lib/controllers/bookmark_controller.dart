@@ -14,6 +14,7 @@ class BookmarkController extends GetxController {
   Future<void> loadBookmarks() async {
     final data = await DBHelper.getBookmarks();
     bookmarks.value = data.map((e) => BookmarkModel.fromJson(e)).toList();
+    Get.snackbar("ヤッタ!! ☆*: .｡. o(≧▽≦)o .｡.:*☆", "List berhasil di-refresh");
   }
 
   Future<void> toggleBookmark(BookmarkModel item) async {
@@ -21,8 +22,10 @@ class BookmarkController extends GetxController {
 
     if (exists) {
       await DBHelper.delete(item.title);
+      Get.snackbar("ヤッタ!! ☆*: .｡. o(≧▽≦)o .｡.:*☆", "Item berhasil di-unbookmark");
     } else {
       await DBHelper.insert(item.toJson());
+      Get.snackbar("ヤッタ!! ☆*: .｡. o(≧▽≦)o .｡.:*☆", "Item berhasil di-bookmark");
     }
 
     await loadBookmarks();

@@ -32,10 +32,10 @@ class LoginController extends GetxController {
 
       // Simpan token di SharedPreferences
       final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token', user.token);
+      await prefs.setString('token', user.token);
 
+      Get.snackbar("ヤッタ!! ☆*: .｡. o(≧▽≦)o .｡.:*☆", "Login berhasil!");
       Get.offAllNamed(AppRoutes.bottomnav);
-
     } catch (e) {
       Get.snackbar("Login Gagal", e.toString());
     } finally {
@@ -47,7 +47,7 @@ class LoginController extends GetxController {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
 
+    Get.snackbar("ヤッタ!! ☆*: .｡. o(≧▽≦)o .｡.:*☆", "Logout berhasil!");
     Get.offAllNamed(AppRoutes.login);
   }
-
 }

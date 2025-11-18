@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import '../utils/apptextstyle.dart';
 import '../utils/colors.dart';
@@ -23,30 +22,44 @@ class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 25),
-      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 5),
-      color: AppColors.backround,
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      decoration: BoxDecoration(
+        color: AppColors.backround,
+        border: Border(bottom: BorderSide(color: AppColors.primary, width: 2)),
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          if (leftIcon != null)
-            IconButton(
-                onPressed: onLeftPressed,
-                icon: Icon(leftIcon, color: AppColors.secondary, size: 30)
-            )
-          else const SizedBox(width: 20),
-          Text(
-            title, style: AppTextStyle.paragraph.copyWith(fontWeight: FontWeight.bold),
+          Row(
+            children: [
+              if (leftIcon != null)
+                IconButton(
+                  onPressed: onLeftPressed,
+                  icon: Icon(leftIcon, color: AppColors.primary, size: 30),
+                )
+              else
+                const SizedBox(width: 20),
+              Text(
+                title,
+                style: AppTextStyle.paragraph.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primary,
+                ),
+              ),
+            ],
           ),
           if (rightIcon != null)
             IconButton(
-                onPressed: onLeftPressed,
-                icon: Icon(rightIcon)
+              onPressed: onRightPressed,
+              icon: Icon(rightIcon, color: AppColors.primary),
             )
-          else const SizedBox(width: 48),
+          else
+            const SizedBox(width: 48),
         ],
       ),
     );
   }
+
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

@@ -4,13 +4,16 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color primary = Color(0xFF007554);
-  static const Color primary2 = Color(0xFF2FD89A);
-  static const Color fontPrimary = Color(0xFF012D23);
-  static const Color fontGreen = Color(0xFF007554);
-  static const Color secondary = Color(0xFF575757);
-  static const Color secondary2 = Color(0xFF979797);
-  static const Color backround = Color(0xFFF6F6F6);
-  static const Color backroundPrimary = Color(0xFFA4F6D0);
-  static const Color white = Colors.white;
+  // Brutalist theme - Black & White
+  static const Color primary = Color(0xFF000000); // Pure Black
+  static const Color primary2 = Color(0xFF1A1A1A); // Dark Gray
+  static const Color fontPrimary = Color(0xFF000000); // Black text
+  static const Color fontGreen = Color(0xFF000000); // Black
+  static const Color secondary = Color(0xFF333333); // Dark gray
+  static const Color secondary2 = Color(0xFF666666); // Medium gray
+  static const Color backround = Color(0xFFFFFFFF); // Pure White
+  static const Color backroundPrimary = Color(0xFFF0F0F0); // Light gray
+  static const Color white = Color(0xFFFFFFFF); // Pure White
+  static const Color border = Color(0xFF000000); // Black borders
+  static const Color gray = Color(0xFFEEEEEE); // Light gray for backgrounds
 }

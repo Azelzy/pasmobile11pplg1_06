@@ -17,7 +17,7 @@ class LoginTextfield extends StatelessWidget {
     this.isPassword = false,
     this.obscure = false,
     this.onToggleObscrure,
-    this.prefixIcon
+    this.prefixIcon,
   });
 
   @override
@@ -25,35 +25,37 @@ class LoginTextfield extends StatelessWidget {
     return TextField(
       controller: controller,
       obscureText: isPassword ? obscure : false,
-      style: AppTextStyle.paragraph,
+      style: AppTextStyle.paragraph.copyWith(color: AppColors.primary),
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: AppTextStyle.paragraph.copyWith(color: AppColors.secondary2),
         filled: true,
         fillColor: AppColors.white,
-        contentPadding:
-        const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 15,
+          horizontal: 15,
+        ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.secondary2, width: 1),
+          borderRadius: BorderRadius.circular(0),
+          borderSide: BorderSide(color: AppColors.primary, width: 2),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: AppColors.primary, width: 1),
+          borderRadius: BorderRadius.circular(0),
+          borderSide: BorderSide(color: AppColors.primary, width: 2),
         ),
         prefixIcon: prefixIcon != null
             ? Icon(prefixIcon, color: AppColors.primary)
             : null,
         suffixIcon: isPassword
             ? IconButton(
-          onPressed: onToggleObscrure,
-          icon: Icon(
-            obscure
-                ? Icons.visibility_off_rounded
-                : Icons.visibility_rounded,
-            color: AppColors.primary,
-          ),
-        )
+                onPressed: onToggleObscrure,
+                icon: Icon(
+                  obscure
+                      ? Icons.visibility_off_rounded
+                      : Icons.visibility_rounded,
+                  color: AppColors.primary,
+                ),
+              )
             : null,
       ),
     );

@@ -16,6 +16,7 @@ class ProductController extends GetxController {
     try {
       isLoading.value = true;
       product.value = await ApiService.getProduct();
+      Get.snackbar("ヤッタ!! ☆*: .｡. o(≧▽≦)o .｡.:*☆", "List berhasil di-refresh");
     } catch (e) {
       Get.snackbar("Error", e.toString());
     } finally {
