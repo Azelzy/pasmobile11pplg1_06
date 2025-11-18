@@ -5,7 +5,7 @@ import 'package:pasmobile11pplg1_06/pages/favorite_page.dart';
 import 'package:pasmobile11pplg1_06/pages/listproduk_page.dart';
 import 'package:pasmobile11pplg1_06/pages/profile_page.dart';
 
-class BottomnavPage extends GetView<BottomNavController> {
+class BottomnavPage extends StatelessWidget {
   BottomnavPage({super.key});
 
   final List<Widget> pages = [
@@ -18,8 +18,9 @@ class BottomnavPage extends GetView<BottomNavController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Scaffold(
+    return Obx(() {
+      final controller = Get.find<BottomNavController>();
+      return Scaffold(
         backgroundColor: Colors.white,
         body: pages[controller.currentIndex.value],
         bottomNavigationBar: Container(
@@ -95,7 +96,7 @@ class BottomnavPage extends GetView<BottomNavController> {
             unselectedLabelStyle: const TextStyle(fontSize: 12),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

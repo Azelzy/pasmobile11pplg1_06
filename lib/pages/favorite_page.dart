@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:pasmobile11pplg1_06/controllers/favoritepage_controller.dart';
 import 'package:pasmobile11pplg1_06/widgets/button.dart';
 
-class FavoritePage extends GetView<FavoriteController> {
+class FavoritePage extends StatelessWidget {
   const FavoritePage({super.key});
 
   @override
@@ -28,6 +28,7 @@ class FavoritePage extends GetView<FavoriteController> {
         ),
       ),
       body: Obx(() {
+        final controller = Get.find<FavoriteController>();
         if (controller.isLoading.value) {
           return const Center(
             child: CircularProgressIndicator(

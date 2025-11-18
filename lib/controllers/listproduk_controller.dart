@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pasmobile11pplg1_06/helper/dbproduct_helper.dart';
-import 'package:pasmobile11pplg1_06/models/Store_model.dart';
+import 'package:pasmobile11pplg1_06/models/store_model.dart';
 import 'package:pasmobile11pplg1_06/networks/client_network.dart';
 
 class ListprodukController extends GetxController {

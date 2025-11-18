@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pasmobile11pplg1_06/controllers/splashscreen_controller.dart';
+import 'package:pasmobile11pplg1_06/helper/sharedpref_helper.dart';
+import 'package:pasmobile11pplg1_06/routes/routes.dart';
 
-class SplashscreenPage extends GetView<SplashscreenController> {
+class SplashscreenPage extends StatelessWidget {
   const SplashscreenPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Navigate after 2 seconds
+    Future.delayed(const Duration(seconds: 2), () async {
+      try {
+        final isLoggedIn = await SharedPrefHelper.isLoggedIn();
+        if (isLoggedIn) {
+          Get.offNamed(AppRoutes.bottomNav);
+        } else {
+          Get.offNamed(AppRoutes.login);
+        }
+      } catch (e) {
+        Get.offNamed(AppRoutes.login);
+      }
+    });
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -20,7 +35,7 @@ class SplashscreenPage extends GetView<SplashscreenController> {
                 border: Border.all(color: Colors.black, width: 3),
               ),
               child: const Text(
-                'STORE',
+                'ストアー',
                 style: TextStyle(
                   fontSize: 48,
                   fontWeight: FontWeight.bold,
@@ -31,12 +46,12 @@ class SplashscreenPage extends GetView<SplashscreenController> {
             ),
             const SizedBox(height: 60),
             // Loading indicator
-            SizedBox(
+            const SizedBox(
               width: 60,
               height: 60,
               child: CircularProgressIndicator(
                 strokeWidth: 3,
-                valueColor: const AlwaysStoppedAnimation<Color>(Colors.black),
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
               ),
             ),
             const SizedBox(height: 40),

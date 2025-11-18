@@ -13,7 +13,7 @@ class SplashscreenController extends GetxController {
   Future<void> _checkLoginStatus() async {
     try {
       // Simulate splash screen delay
-      await Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 1));
 
       final isLoggedIn = await SharedPrefHelper.isLoggedIn();
 

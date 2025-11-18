@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:pasmobile11pplg1_06/models/login_model.dart';
+import 'package:pasmobile11pplg1_06/models/register_model.dart';
 import 'package:pasmobile11pplg1_06/helper/sharedpref_helper.dart';
 import 'package:pasmobile11pplg1_06/networks/client_network.dart';
 import 'package:pasmobile11pplg1_06/routes/routes.dart';
@@ -7,58 +11,8 @@ import 'package:pasmobile11pplg1_06/routes/routes.dart';
 class AuthController extends GetxController {
   final isLoading = false.obs;
   final errorMessage = ''.obs;
-  final username = ''.obs;
-  final token = ''.obs;
 
-  // Register
-  Future<void> register({
-    required String username,
-    required String password,
-    required String fullName,
-    required String email,
-  }) async {
-    try {
-      isLoading.value = true;
-      errorMessage.value = '';
-
-      final response = await ClientNetwork.register(
-        username: username,
-        password: password,
-        fullName: fullName,
-        email: email,
-      );
-
-      if (response.status) {
-        Get.snackbar(
-          'Success',
-          response.message,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
-        Get.offNamed(AppRoutes.login);
-      } else {
-        errorMessage.value = response.message;
-        Get.snackbar(
-          'Error',
-          response.message,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
-      }
-    } catch (e) {
-      errorMessage.value = e.toString();
-      Get.snackbar(
-        'Error',
-        e.toString(),
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  // Login
+  // Login method
   Future<void> login({
     required String username,
     required String password,
@@ -67,85 +21,145 @@ class AuthController extends GetxController {
       isLoading.value = true;
       errorMessage.value = '';
 
-      final response = await ClientNetwork.login(
-        username: username,
-        password: password,
-      );
+      final response = await http
+          .post(
+            Uri.parse(ClientNetwork.login),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({'username': username, 'password': password}),
+          )
+          .timeout(const Duration(seconds: 30));
 
-      if (response.status) {
-        // Save token to SharedPreferences
-        await SharedPrefHelper.saveToken(response.token);
-        await SharedPrefHelper.saveUserInfo(username, '', '');
+      if (response.statusCode == 200) {
+        final loginModel = loginModelFromJson(response.body);
 
-        // Assign ke property class
-        this.username.value = username;
-        token.value = response.token;
+        if (loginModel.status) {
+          // Save token dan username
+          await SharedPrefHelper.saveToken(loginModel.token);
+          await SharedPrefHelper.saveUsername(username);
+          await SharedPrefHelper.saveLoginType('api');
 
-        Get.snackbar(
-          'Success',
-          'Login Successful',
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-        );
+          Get.snackbar(
+            'Success',
+            loginModel.message,
+            backgroundColor: const Color(0xFF4CAF50),
+            colorText: const Color(0xFFFFFFFF),
+            duration: const Duration(seconds: 2),
+          );
 
-        Get.offNamed(AppRoutes.bottomNav);
+          // Navigate to bottom nav
+          Get.offAllNamed(AppRoutes.bottomNav);
+        } else {
+          errorMessage.value = loginModel.message;
+          Get.snackbar(
+            'Error',
+            loginModel.message,
+            backgroundColor: const Color(0xFFF44336),
+            colorText: const Color(0xFFFFFFFF),
+          );
+        }
       } else {
-        errorMessage.value = response.message;
+        errorMessage.value = 'Login failed: ${response.statusCode}';
         Get.snackbar(
           'Error',
-          response.message,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
+          'Login failed: ${response.statusCode}',
+          backgroundColor: const Color(0xFFF44336),
+          colorText: const Color(0xFFFFFFFF),
         );
       }
     } catch (e) {
       errorMessage.value = e.toString();
       Get.snackbar(
         'Error',
-        e.toString(),
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+        'Login error: ${e.toString()}',
+        backgroundColor: const Color(0xFFF44336),
+        colorText: const Color(0xFFFFFFFF),
       );
     } finally {
       isLoading.value = false;
     }
   }
 
-  // Logout
-  Future<void> logout() async {
+  // Register method
+  Future<void> register({
+    required String username,
+    required String password,
+    required String email,
+    required String fullName,
+  }) async {
     try {
       isLoading.value = true;
+      errorMessage.value = '';
+
+      final response = await http
+          .post(
+            Uri.parse(ClientNetwork.register),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              'username': username,
+              'password': password,
+              'email': email,
+              'full_name': fullName,
+            }),
+          )
+          .timeout(const Duration(seconds: 30));
+
+      if (response.statusCode == 200) {
+        final registerModel = registerModelFromJson(response.body);
+
+        if (registerModel.status) {
+          Get.snackbar(
+            'Success',
+            registerModel.message,
+            backgroundColor: const Color(0xFF4CAF50),
+            colorText: const Color(0xFFFFFFFF),
+            duration: const Duration(seconds: 2),
+          );
+
+          // Navigate to login
+          Get.offAllNamed(AppRoutes.login);
+        } else {
+          errorMessage.value = registerModel.message;
+          Get.snackbar(
+            'Error',
+            registerModel.message,
+            backgroundColor: const Color(0xFFF44336),
+            colorText: const Color(0xFFFFFFFF),
+          );
+        }
+      } else {
+        errorMessage.value = 'Register failed: ${response.statusCode}';
+        Get.snackbar(
+          'Error',
+          'Register failed: ${response.statusCode}',
+          backgroundColor: const Color(0xFFF44336),
+          colorText: const Color(0xFFFFFFFF),
+        );
+      }
+    } catch (e) {
+      errorMessage.value = e.toString();
+      Get.snackbar(
+        'Error',
+        'Register error: ${e.toString()}',
+        backgroundColor: const Color(0xFFF44336),
+        colorText: const Color(0xFFFFFFFF),
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  // Logout method
+  Future<void> logout() async {
+    try {
       await SharedPrefHelper.logout();
-      username.value = '';
-      token.value = '';
-      Get.offNamed(AppRoutes.login);
+      Get.offAllNamed(AppRoutes.login);
     } catch (e) {
       Get.snackbar(
         'Error',
-        e.toString(),
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+        'Logout error: ${e.toString()}',
+        backgroundColor: const Color(0xFFF44336),
+        colorText: const Color(0xFFFFFFFF),
       );
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  // Check if user is logged in
-  Future<bool> checkLogin() async {
-    return await SharedPrefHelper.isLoggedIn();
-  }
-
-  // Load user info from SharedPreferences
-  Future<void> loadUserInfo() async {
-    final savedUsername = await SharedPrefHelper.getUsername();
-    final savedToken = await SharedPrefHelper.getToken();
-
-    if (savedUsername != null) {
-      username.value = savedUsername;
-    }
-    if (savedToken != null) {
-      token.value = savedToken;
     }
   }
 }

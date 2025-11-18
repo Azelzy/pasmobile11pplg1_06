@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:pasmobile11pplg1_06/controllers/profile_controller.dart';
 import 'package:pasmobile11pplg1_06/widgets/button.dart';
 
-class ProfilePage extends GetView<ProfileController> {
+class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
@@ -28,6 +28,7 @@ class ProfilePage extends GetView<ProfileController> {
         ),
       ),
       body: Obx(() {
+        final controller = Get.find<ProfileController>();
         if (controller.isLoading.value) {
           return const Center(
             child: CircularProgressIndicator(
@@ -174,48 +175,7 @@ class ProfilePage extends GetView<ProfileController> {
                     label: 'LOGOUT',
                     isLoading: controller.isLoading.value,
                     onPressed: () {
-                      Get.dialog(
-                        AlertDialog(
-                          title: const Text(
-                            'LOGOUT',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1,
-                            ),
-                          ),
-                          content: const Text(
-                            'Are you sure you want to logout?',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Get.back(),
-                              child: const Text(
-                                'CANCEL',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 1,
-                                ),
-                              ),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Get.back();
-                                controller.logout();
-                              },
-                              child: const Text(
-                                'LOGOUT',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 1,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
+                      _showLogoutDialog(context);
                     },
                     backgroundColor: Colors.black,
                     textColor: Colors.white,
@@ -227,6 +187,93 @@ class ProfilePage extends GetView<ProfileController> {
           ),
         );
       }),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    Get.dialog(
+      Dialog(
+        backgroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(
+          side: BorderSide(color: Colors.black, width: 3),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.black, width: 3),
+          ),
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Title
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black, width: 2),
+                ),
+                child: const Text(
+                  'LOGOUT',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              // Message
+              const Text(
+                'Are you sure you want to logout?',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  letterSpacing: 0.5,
+                  color: Colors.black,
+                ),
+              ),
+              const SizedBox(height: 32),
+              // Buttons
+              Row(
+                children: [
+                  Expanded(
+                    child: AppButton(
+                      label: 'CANCEL',
+                      onPressed: () => Get.back(),
+                      backgroundColor: Colors.white,
+                      textColor: Colors.black,
+                      height: 48,
+                      borderSide: const BorderSide(
+                        color: Colors.black,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: AppButton(
+                      label: 'LOGOUT',
+                      onPressed: () {
+                        Get.back();
+                        Get.find<ProfileController>().logout();
+                      },
+                      backgroundColor: Colors.black,
+                      textColor: Colors.white,
+                      height: 48,
+                      borderSide: const BorderSide(
+                        color: Colors.black,
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      barrierDismissible: true,
     );
   }
 }

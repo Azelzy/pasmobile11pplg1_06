@@ -16,7 +16,7 @@ import 'package:pasmobile11pplg1_06/routes/routes.dart';
 
 class AppPages {
   // FIX #1: Ubah initial route ke splash
-  static const String initial = AppRoutes.splash;
+  static const String initial = AppRoutes.bottomNav;
 
   static final routes = [
     GetPage(

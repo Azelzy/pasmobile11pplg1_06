@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:pasmobile11pplg1_06/controllers/listproduk_controller.dart';
 import 'package:pasmobile11pplg1_06/widgets/button.dart';
 
-class ListprodukPage extends GetView<ListprodukController> {
+class ListprodukPage extends StatelessWidget {
   const ListprodukPage({super.key});
 
   @override
@@ -28,6 +28,7 @@ class ListprodukPage extends GetView<ListprodukController> {
         ),
       ),
       body: Obx(() {
+        final controller = Get.find<ListprodukController>();
         if (controller.isLoading.value) {
           return const Center(
             child: CircularProgressIndicator(

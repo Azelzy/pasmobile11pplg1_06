@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as path;
-import 'package:pasmobile11pplg1_06/models/Store_model.dart';
+import 'package:pasmobile11pplg1_06/models/store_model.dart';
 
 class DbProductHelper {
   static const String tableName = 'favorites';

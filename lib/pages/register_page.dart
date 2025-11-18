@@ -4,7 +4,7 @@ import 'package:pasmobile11pplg1_06/controllers/auth_controller.dart';
 import 'package:pasmobile11pplg1_06/routes/routes.dart';
 import 'package:pasmobile11pplg1_06/widgets/button.dart';
 
-class RegisterPage extends GetView<AuthController> {
+class RegisterPage extends StatelessWidget {
   RegisterPage({super.key});
 
   final usernameController = TextEditingController();
@@ -146,7 +146,7 @@ class RegisterPage extends GetView<AuthController> {
               Obx(
                 () => AppButton(
                   label: 'REGISTER',
-                  isLoading: controller.isLoading.value,
+                  isLoading: Get.find<AuthController>().isLoading.value,
                   onPressed: () {
                     // FIX #2: Validasi yang lebih baik dengan trim()
                     final username = usernameController.text.trim();
@@ -189,11 +189,11 @@ class RegisterPage extends GetView<AuthController> {
                       return;
                     }
 
-                    controller.register(
-                      username: username,
-                      password: password,
-                      email: email,
-                      fullName: fullName,
+                    Get.find<AuthController>().register(
+                      username: usernameController.text,
+                      password: passwordController.text,
+                      email: emailController.text,
+                      fullName: fullNameController.text,
                     );
                   },
                   borderSide: const BorderSide(color: Colors.black, width: 2),

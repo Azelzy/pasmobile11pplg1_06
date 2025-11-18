@@ -1,61 +1,99 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pasmobile11pplg1_06/controllers/auth_controller.dart';
 import 'package:pasmobile11pplg1_06/helper/sharedpref_helper.dart';
+import 'package:pasmobile11pplg1_06/routes/routes.dart';
 
 class ProfileController extends GetxController {
+  final isLoading = false.obs;
   final username = ''.obs;
   final email = ''.obs;
   final fullName = ''.obs;
-  final isLoading = false.obs;
-
-  // FIX #4: Gunakan Get.find dengan orElse untuk handle jika belum ada
-  AuthController get authController {
-    try {
-      return Get.find<AuthController>();
-    } catch (e) {
-      // Jika AuthController belum ada, buat instance baru
-      Get.put(AuthController());
-      return Get.find<AuthController>();
-    }
-  }
+  final photoUrl = ''.obs;
+  final errorMessage = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
-    loadUserInfo();
+    loadUserProfile();
   }
 
-  // Load user info from SharedPreferences
-  Future<void> loadUserInfo() async {
+  // Load user profile from SharedPreferences
+  Future<void> loadUserProfile() async {
     try {
       isLoading.value = true;
-      final savedUsername = await SharedPrefHelper.getUsername();
-      final savedEmail = await SharedPrefHelper.getEmail();
-      final savedFullName = await SharedPrefHelper.getFullName();
+      errorMessage.value = '';
 
-      if (savedUsername != null) username.value = savedUsername;
-      if (savedEmail != null) email.value = savedEmail;
-      if (savedFullName != null) fullName.value = savedFullName;
+      final user = await SharedPrefHelper.getUsername();
+      final userEmail = await SharedPrefHelper.getEmail();
+      final userFullName = await SharedPrefHelper.getFullName();
+      final userPhotoUrl = await SharedPrefHelper.getPhotoUrl();
+
+      username.value = user ?? 'Guest';
+      email.value = userEmail ?? '-';
+      fullName.value = userFullName ?? '-';
+      photoUrl.value = userPhotoUrl ?? '';
     } catch (e) {
-      Get.snackbar(
-        'Error',
-        'Failed to load user info',
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-      );
+      errorMessage.value = e.toString();
     } finally {
       isLoading.value = false;
     }
   }
 
-  // Logout
+  // Logout method
   Future<void> logout() async {
-    await authController.logout();
+    try {
+      await SharedPrefHelper.logout();
+      Get.offAllNamed(AppRoutes.login);
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Logout error: ${e.toString()}',
+        backgroundColor: const Color(0xFFF44336),
+        colorText: const Color(0xFFFFFFFF),
+      );
+    }
   }
 
-  // Refresh user info
-  Future<void> refreshUserInfo() async {
-    await loadUserInfo();
+  // Update profile method (optional)
+  Future<void> updateProfile({
+    String? newUsername,
+    String? newEmail,
+    String? newFullName,
+  }) async {
+    try {
+      isLoading.value = true;
+
+      if (newUsername != null) {
+        await SharedPrefHelper.saveUsername(newUsername);
+        username.value = newUsername;
+      }
+
+      if (newEmail != null) {
+        await SharedPrefHelper.saveEmail(newEmail);
+        email.value = newEmail;
+      }
+
+      if (newFullName != null) {
+        await SharedPrefHelper.saveFullName(newFullName);
+        fullName.value = newFullName;
+      }
+
+      Get.snackbar(
+        'Success',
+        'Profile updated',
+        backgroundColor: const Color(0xFF4CAF50),
+        colorText: const Color(0xFFFFFFFF),
+        duration: const Duration(seconds: 2),
+      );
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Update error: ${e.toString()}',
+        backgroundColor: const Color(0xFFF44336),
+        colorText: const Color(0xFFFFFFFF),
+      );
+    } finally {
+      isLoading.value = false;
+    }
   }
 }
