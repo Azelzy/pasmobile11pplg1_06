@@ -1,19 +1,22 @@
-# Product Store App - Flutter GetX
+# Product Store App - PAS MOBILE DEV ABSEN 06
 
-A complete Flutter application with GetX state management implementing user authentication, product listing, bookmarking system, and user profile management using brutalist design aesthetic.
+A simple Flutter application hitting multiple API with GetX state management implementing user authentication, product listing, bookmarking system, and user profile management using brutalist design aesthetic.
+## SNEAK PEAK APP
+![](SSPAS1.jpg)
+![](SSPAS2.jpg)
 
-## 📋 Project Overview
+## Project Overview
 
 This application demonstrates:
-- ✅ User Registration and Login with token-based authentication
-- ✅ Product listing from FakeStore API
-- ✅ Product bookmarking with local SQLite database
-- ✅ User profile management
-- ✅ Splash screen with login status checking
-- ✅ GetX state management
-- ✅ Brutalist UI design aesthetic
+- User Registration and Login with token-based authentication
+- Product listing from FakeStore API
+- Product bookmarking with local SQLite database
+- User profile management
+- Splash screen with login status checking
+- GetX state management
+- Brutalist UI design aesthetic
 
-## 🏗️ Architecture
+## Architecture
 
 ### State Management
 - **GetX (get: ^4.7.2)** - Reactive state management and routing
@@ -58,18 +61,18 @@ lib/
 - Checks login status on app start
 - Routes to appropriate screen
 
-## 🗄️ Data Storage
+## Data Storage
 
 **SharedPreferences:** auth_token, username, email, full_name
 **SQLite:** Favorites table with product details
 
-## 🎨 Design - Brutalist Aesthetic
+## Design - Brutalist Aesthetic
 - Heavy black borders (2-3px)
 - Minimal palette (black, white, gray)
 - Bold uppercase typography with 1-2px letter spacing
 - Maximum contrast and clarity
 
-## 📦 Dependencies
+## Dependencies
 ```yaml
 get: ^4.7.2                # State management & routing
 shared_preferences: ^2.2.3 # Local preferences
@@ -78,13 +81,13 @@ http: ^1.2.1               # API calls
 path: ^1.9.0               # Database paths
 ```
 
-## 🚀 Quick Start
+## Quick Start
 ```bash
 flutter pub get
 flutter run
 ```
 
-## 📱 Screens
+## Screens
 1. Splash Screen
 2. Login Screen
 3. Register Screen
@@ -92,7 +95,7 @@ flutter run
 5. Bookmarks Screen
 6. Profile Screen
 
-## 🛠️ GetX Controllers
+## GetX Controllers
 - **AuthController** - Registration, login, logout
 - **ListprodukController** - Product fetching and bookmarking
 - **FavoriteController** - Favorite management
