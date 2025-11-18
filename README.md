@@ -1,6 +1,9 @@
 # Product Store App - PAS MOBILE DEV ABSEN 06
 
 A simple Flutter application hitting multiple API with GetX state management implementing user authentication, product listing, bookmarking system, and user profile management using brutalist design aesthetic.
+
+# FIXED PROJECT ON FIX BRANCH!!
+
 ## SNEAK PEAK APP
 ![](SSPAS1.jpg)
 ![](SSPAS2.jpg)
