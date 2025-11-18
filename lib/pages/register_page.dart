@@ -1,241 +1,97 @@
 import 'package:flutter/material.dart';
+import '../components/custom_button.dart';
+import '../components/login_textfield.dart';
+import '../controllers/register_controller.dart';
+import '../routes/routes.dart';
+import '../utils/apptextstyle.dart';
+import '../utils/colors.dart';
 import 'package:get/get.dart';
-import 'package:pasmobile11pplg1_06/controllers/auth_controller.dart';
-import 'package:pasmobile11pplg1_06/routes/routes.dart';
-import 'package:pasmobile11pplg1_06/widgets/button.dart';
 
 class RegisterPage extends StatelessWidget {
-  RegisterPage({super.key});
-
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
-  final emailController = TextEditingController();
-  final fullNameController = TextEditingController();
+  const RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final RegisterController controller = Get.find();
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+      backgroundColor: AppColors.backround,
+      body: ListView(
+        padding: EdgeInsets.all(20),
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 40),
-              // Header
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 2),
-                ),
-                child: const Text(
-                  'REGISTER',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2,
-                    color: Colors.black,
+              SizedBox(height: 50),
+              Center(child: Text('AmbaStore App', style: AppTextStyle.title)),
+              SizedBox(height: 50),
+              Center(
+                child: Text(
+                  'Silahkan membuat akun disini!',
+                  style: AppTextStyle.paragraph.copyWith(
+                    color: AppColors.secondary,
                   ),
                 ),
               ),
-              const SizedBox(height: 32),
-              // Full Name field
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 2),
-                ),
-                child: TextField(
-                  controller: fullNameController,
-                  decoration: const InputDecoration(
-                    hintText: 'FULL NAME',
-                    hintStyle: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
-                      letterSpacing: 1,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(16),
-                  ),
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 1,
-                  ),
-                ),
+              SizedBox(height: 25),
+              LoginTextfield(
+                controller: controller.usernameController,
+                hintText: 'Masukkan Username',
               ),
-              const SizedBox(height: 12),
-              // Email field
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 2),
-                ),
-                child: TextField(
-                  controller: emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    hintText: 'EMAIL',
-                    hintStyle: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
-                      letterSpacing: 1,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(16),
-                  ),
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 1,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              // Username field
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 2),
-                ),
-                child: TextField(
-                  controller: usernameController,
-                  decoration: const InputDecoration(
-                    hintText: 'USERNAME',
-                    hintStyle: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
-                      letterSpacing: 1,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(16),
-                  ),
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 1,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              // Password field
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 2),
-                ),
-                child: TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    hintText: 'PASSWORD',
-                    hintStyle: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
-                      letterSpacing: 1,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(16),
-                  ),
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 1,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 32),
-              // Register button
+              SizedBox(height: 15),
               Obx(
-                () => AppButton(
-                  label: 'REGISTER',
-                  isLoading: Get.find<AuthController>().isLoading.value,
-                  onPressed: () {
-                    // FIX #2: Validasi yang lebih baik dengan trim()
-                    final username = usernameController.text.trim();
-                    final password = passwordController.text.trim();
-                    final email = emailController.text.trim();
-                    final fullName = fullNameController.text.trim();
-
-                    if (username.isEmpty ||
-                        password.isEmpty ||
-                        email.isEmpty ||
-                        fullName.isEmpty) {
-                      Get.snackbar(
-                        'Error',
-                        'Please fill all fields',
-                        backgroundColor: Colors.red,
-                        colorText: Colors.white,
-                      );
-                      return;
-                    }
-
-                    // Validasi email format
-                    if (!GetUtils.isEmail(email)) {
-                      Get.snackbar(
-                        'Error',
-                        'Please enter a valid email',
-                        backgroundColor: Colors.red,
-                        colorText: Colors.white,
-                      );
-                      return;
-                    }
-
-                    // Validasi password minimal 6 karakter
-                    if (password.length < 6) {
-                      Get.snackbar(
-                        'Error',
-                        'Password must be at least 6 characters',
-                        backgroundColor: Colors.red,
-                        colorText: Colors.white,
-                      );
-                      return;
-                    }
-
-                    Get.find<AuthController>().register(
-                      username: usernameController.text,
-                      password: passwordController.text,
-                      email: emailController.text,
-                      fullName: fullNameController.text,
-                    );
-                  },
-                  borderSide: const BorderSide(color: Colors.black, width: 2),
+                () => LoginTextfield(
+                  controller: controller.passwordController,
+                  hintText: 'Masukkan Password',
+                  obscure: controller.obscurePassword.value,
+                  onToggleObscrure: controller.toggleObscure,
+                  isPassword: true,
                 ),
               ),
-              const SizedBox(height: 24),
-              // Login link
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 1),
-                ),
+              SizedBox(height: 15),
+              LoginTextfield(
+                controller: controller.fullnameController,
+                hintText: 'Masukkan Nama Lengkap',
+              ),
+              SizedBox(height: 15),
+              LoginTextfield(
+                controller: controller.emailController,
+                hintText: 'Masukkan Email',
+              ),
+              SizedBox(height: 25),
+              CustomButton(
+                  text: 'Buat Akun',
+                  onPressed: controller.register
+              ),
+              SizedBox(height: 25),
+              Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Already have account? ',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black,
-                        letterSpacing: 0.5,
+                    Text(
+                      'Sudah punya akun?',
+                      style: AppTextStyle.paragraph.copyWith(
+                        color: AppColors.secondary,
                       ),
                     ),
+                    SizedBox(width: 5),
                     GestureDetector(
-                      onTap: () => Get.toNamed(AppRoutes.login),
-                      child: const Text(
-                        'LOGIN',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                          decoration: TextDecoration.underline,
-                          letterSpacing: 1,
+                      onTap: () {
+                        Get.offAllNamed(AppRoutes.login);
+                      }  ,
+                      child: Text(
+                        'Login',
+                        style: AppTextStyle.paragraph.copyWith(
+                          color: AppColors.primary,
                         ),
                       ),
-                    ),
+                    )
                   ],
-                ),
+                )
               ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }

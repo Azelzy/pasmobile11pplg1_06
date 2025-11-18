@@ -1,29 +1,22 @@
-// To parse this JSON data, do
-//
-//     final registerModel = registerModelFromJson(jsonString);
-
-import 'dart:convert';
-
-RegisterModel registerModelFromJson(String str) => RegisterModel.fromJson(json.decode(str));
-
-String registerModelToJson(RegisterModel data) => json.encode(data.toJson());
-
 class RegisterModel {
-    bool status;
-    String message;
+  final String username;
+  final String password;
+  final String full_name;
+  final String email;
 
-    RegisterModel({
-        required this.status,
-        required this.message,
-    });
+  RegisterModel({
+    required this.username,
+    required this.password,
+    required this.full_name,
+    required this.email,
+  });
 
-    factory RegisterModel.fromJson(Map<String, dynamic> json) => RegisterModel(
-        status: json["status"],
-        message: json["message"],
+  factory RegisterModel.fromJson(Map<String, dynamic> json) {
+    return RegisterModel(
+      username: json['username'],
+      password: json['password'],
+      full_name: json['full_name'],
+      email: json['email'],
     );
-
-    Map<String, dynamic> toJson() => {
-        "status": status,
-        "message": message,
-    };
+  }
 }

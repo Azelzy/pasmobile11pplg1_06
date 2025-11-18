@@ -1,9 +1,9 @@
-abstract class AppRoutes {
-  static const String splash = '/splash';
-  static const String login = '/login';
-  static const String register = '/register';
-  static const String bottomNav = '/bottomnav';
-  static const String listProduk = '/listproduk';
-  static const String favorite = '/favorite';
-  static const String profile = '/profile';
+class AppRoutes {
+  static final String register = '/register';
+  static final String login = '/login';
+  static final String product = '/product';
+  static final String bookmark = '/bookmark';
+  static final String profile = '/profile';
+  static final String bottomnav = '/bottomnav';
+  static final String splashscreen = '/splashscreen';
 }

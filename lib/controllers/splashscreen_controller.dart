@@ -1,34 +1,26 @@
 import 'package:get/get.dart';
-import 'package:pasmobile11pplg1_06/helper/sharedpref_helper.dart';
-import 'package:pasmobile11pplg1_06/routes/routes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../routes/routes.dart';
 
-class SplashscreenController extends GetxController {
+class SplashScreenController extends GetxController {
+
   @override
-  void onReady() {
-    super.onReady();
-    _checkLoginStatus();
+  void onInit() {
+    super.onInit();
+    checkLogin();
   }
 
-  // Check if user is logged in and navigate accordingly
-  Future<void> _checkLoginStatus() async {
-    try {
-      // Simulate splash screen delay
-      await Future.delayed(const Duration(seconds: 1));
+  Future<void> checkLogin() async {
+    await Future.delayed(const Duration(seconds: 2)); // delay splash 2 detik
 
-      final isLoggedIn = await SharedPrefHelper.isLoggedIn();
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
 
-      print('Is logged in: $isLoggedIn'); // Debug log
-
-      if (isLoggedIn) {
-        print('Navigating to bottomNav'); // Debug log
-        Get.offAllNamed(AppRoutes.bottomNav);
-      } else {
-        print('Navigating to login'); // Debug log
-        Get.offAllNamed(AppRoutes.login);
-      }
-    } catch (e) {
-      print('Error checking login status: $e');
-      // Jika ada error, arahkan ke login
+    if (token != null && token.isNotEmpty) {
+      // Sudah login → masuk ke bottomnav
+      Get.offAllNamed(AppRoutes.bottomnav);
+    } else {
+      // Belum login → ke login page
       Get.offAllNamed(AppRoutes.login);
     }
   }

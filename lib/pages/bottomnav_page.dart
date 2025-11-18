@@ -1,102 +1,63 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pasmobile11pplg1_06/controllers/bottom_nav_controller.dart';
-import 'package:pasmobile11pplg1_06/pages/favorite_page.dart';
-import 'package:pasmobile11pplg1_06/pages/listproduk_page.dart';
-import 'package:pasmobile11pplg1_06/pages/profile_page.dart';
+import '../controllers/bookmark_controller.dart';
+import '../controllers/bottomnav_controller.dart';
+import '../controllers/product_controller.dart';
+import '../controllers/profile_controller.dart';
+import '../pages/bookmark_page.dart';
+import '../pages/product_page.dart';
+import '../pages/profile_page.dart';
+import '../utils/colors.dart';
 
 class BottomnavPage extends StatelessWidget {
   BottomnavPage({super.key});
 
-  final List<Widget> pages = [
-    const ListprodukPage(),
-    const FavoritePage(),
-    const ProfilePage(),
-  ];
+  final ProductController productController = Get.put(ProductController());
+  final BookmarkController bookmarkController = Get.put(BookmarkController());
+  final ProfileController profileController = Get.put(ProfileController());
 
-  final List<String> titles = ['PRODUCTS', 'BOOKMARKS', 'PROFILE'];
+  final BottomNavController controller = Get.find();
+
+  final List<Widget> pages = [
+    ProductPage(),
+    BookmarkPage(),
+    ProfilePage()
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      final controller = Get.find<BottomNavController>();
-      return Scaffold(
-        backgroundColor: Colors.white,
-        body: pages[controller.currentIndex.value],
-        bottomNavigationBar: Container(
-          decoration: const BoxDecoration(
-            border: Border(top: BorderSide(color: Colors.black, width: 2)),
+    final args = Get.arguments;
+    if (args != null && args is int) {
+      controller.currentIndex.value = args;
+    }
+
+    return Obx(() => Scaffold(
+      backgroundColor: AppColors.white,
+      body: pages[controller.currentIndex.value],
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: AppColors.white,
+        type: BottomNavigationBarType.fixed,
+        currentIndex: controller.currentIndex.value,
+        onTap: (index) => controller.currentIndex.value = index,
+        selectedItemColor: AppColors.primary2,
+        unselectedItemColor: AppColors.secondary2,
+        showUnselectedLabels: true,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_basket_rounded),
+            label: 'Product',
           ),
-          child: BottomNavigationBar(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            currentIndex: controller.currentIndex.value,
-            onTap: (index) => controller.changeTabIndex(index),
-            type: BottomNavigationBarType.fixed,
-            items: [
-              BottomNavigationBarItem(
-                icon: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: controller.currentIndex.value == 0
-                          ? Colors.black
-                          : Colors.transparent,
-                      width: 2,
-                    ),
-                  ),
-                  child: const Icon(
-                    Icons.shopping_bag_outlined,
-                    color: Colors.black,
-                  ),
-                ),
-                label: 'PRODUCTS',
-              ),
-              BottomNavigationBarItem(
-                icon: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: controller.currentIndex.value == 1
-                          ? Colors.black
-                          : Colors.transparent,
-                      width: 2,
-                    ),
-                  ),
-                  child: const Icon(
-                    Icons.bookmark_outlined,
-                    color: Colors.black,
-                  ),
-                ),
-                label: 'BOOKMARKS',
-              ),
-              BottomNavigationBarItem(
-                icon: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: controller.currentIndex.value == 2
-                          ? Colors.black
-                          : Colors.transparent,
-                      width: 2,
-                    ),
-                  ),
-                  child: const Icon(Icons.person_outlined, color: Colors.black),
-                ),
-                label: 'PROFILE',
-              ),
-            ],
-            selectedItemColor: Colors.black,
-            unselectedItemColor: Colors.grey,
-            selectedLabelStyle: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-              letterSpacing: 0.5,
-            ),
-            unselectedLabelStyle: const TextStyle(fontSize: 12),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bookmark),
+            label: 'Bookmark',
           ),
-        ),
-      );
-    });
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
+    ));
   }
 }

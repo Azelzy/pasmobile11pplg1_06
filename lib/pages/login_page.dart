@@ -1,159 +1,87 @@
 import 'package:flutter/material.dart';
+import '../components/custom_button.dart';
+import '../components/login_textfield.dart';
+import '../controllers/login_controller.dart';
+import '../routes/routes.dart';
+import '../utils/apptextstyle.dart';
+import '../utils/colors.dart';
 import 'package:get/get.dart';
-import 'package:pasmobile11pplg1_06/controllers/auth_controller.dart';
-import 'package:pasmobile11pplg1_06/routes/routes.dart';
-import 'package:pasmobile11pplg1_06/widgets/button.dart';
 
 class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
-
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final LoginController controller = Get.find();
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+      backgroundColor: AppColors.backround,
+      body: ListView(
+        padding: EdgeInsets.all(20),
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 60),
-              // Header
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 2),
-                ),
-                child: const Text(
-                  'LOGIN',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2,
-                    color: Colors.black,
+              SizedBox(height: 50),
+              Center(child: Text('AmbaStore App', style: AppTextStyle.title)),
+              SizedBox(height: 50),
+              Center(
+                child: Text(
+                  'Silahkan login disini!',
+                  style: AppTextStyle.paragraph.copyWith(
+                    color: AppColors.secondary,
                   ),
                 ),
               ),
-              const SizedBox(height: 48),
-              // Username field
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 2),
-                ),
-                child: TextField(
-                  controller: usernameController,
-                  decoration: const InputDecoration(
-                    hintText: 'USERNAME',
-                    hintStyle: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
-                      letterSpacing: 1,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(16),
-                  ),
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 1,
-                  ),
-                ),
+              SizedBox(height: 25),
+              LoginTextfield(
+                controller: controller.usernameController,
+                hintText: 'Masukkan Username',
               ),
-              const SizedBox(height: 16),
-              // Password field
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 2),
-                ),
-                child: TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    hintText: 'PASSWORD',
-                    hintStyle: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
-                      letterSpacing: 1,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.all(16),
-                  ),
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 1,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 32),
-              // Login button
+              SizedBox(height: 15),
               Obx(
-                () => AppButton(
-                  label: 'LOGIN',
-                  isLoading: Get.find<AuthController>().isLoading.value,
-                  onPressed: () {
-                    // FIX #2: Validasi yang lebih baik dengan trim()
-                    final username = usernameController.text.trim();
-                    final password = passwordController.text.trim();
-
-                    if (username.isEmpty || password.isEmpty) {
-                      Get.snackbar(
-                        'Error',
-                        'Please fill all fields',
-                        backgroundColor: Colors.red,
-                        colorText: Colors.white,
-                      );
-                      return;
-                    }
-
-                    Get.find<AuthController>().login(
-                      username: username,
-                      password: password,
-                    );
-                  },
-                  borderSide: const BorderSide(color: Colors.black, width: 2),
+                    () => LoginTextfield(
+                  controller: controller.passwordController,
+                  hintText: 'Masukkan Password',
+                  obscure: controller.obscurePassword.value,
+                  onToggleObscrure: controller.toggleObscure,
+                  isPassword: true,
                 ),
               ),
-              const SizedBox(height: 24),
-              // Register link
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black, width: 1),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'No account? ',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black,
-                        letterSpacing: 0.5,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () => Get.toNamed(AppRoutes.register),
-                      child: const Text(
-                        'REGISTER',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                          decoration: TextDecoration.underline,
-                          letterSpacing: 1,
+              SizedBox(height: 25),
+              CustomButton(
+                  text: 'Login',
+                  onPressed: controller.login
+              ),
+              SizedBox(height: 25),
+              Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Belum punya akun?',
+                        style: AppTextStyle.paragraph.copyWith(
+                          color: AppColors.secondary,
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                      SizedBox(width: 5),
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed(AppRoutes.register);
+                        }  ,
+                        child: Text(
+                          'Daftar Akun',
+                          style: AppTextStyle.paragraph.copyWith(
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      )
+                    ],
+                  )
               ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }
