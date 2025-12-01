@@ -1,0 +1,52 @@
+name: Build Android APK
+
+on:
+  # Workflow akan berjalan setiap kali ada push ke branch 'fix'
+  push:
+    branches:
+      - fix
+  # Anda juga bisa mengizinkan build manual dari tab Actions di GitHub
+  workflow_dispatch:
+
+jobs:
+  build:
+    # Menggunakan OS Linux terbaru untuk build
+    runs-on: ubuntu-latest
+    
+    steps:
+      # 1. Checkout kode dari repositori
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Setup Java Environment (penting untuk Android build)
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17' # Versi Java yang direkomendasikan untuk Android
+
+      # 3. Setup Flutter Environment
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable' # Menggunakan channel stabil
+          # Tambahkan cache untuk mempercepat build
+          cache: true
+
+      # 4. Ambil semua dependensi (flutter pub get)
+      - name: Get dependencies
+        run: flutter pub get
+
+      # 5. Build APK dalam mode release
+      # File APK akan dibuat di: build/app/outputs/flutter-apk/app-release.apk
+      - name: Build Android APK
+        run: flutter build apk --release
+
+      # 6. Upload hasil build sebagai 'artifact'
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          # Nama file yang akan muncul di GitHub Actions
+          name: pasmobile11pplg1_apk
+          # Path ke file APK yang baru saja dibuat
+          path: build/app/outputs/flutter-apk/app-release.apk
